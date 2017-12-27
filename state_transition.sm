@@ -44,7 +44,7 @@ initial,
 SPEAK:お疲れ様でした。,
 final;
 
-initial       => "start": start;
+initial       => "start": test_start;
 "start"  => "suite/initial";
 "suite/initial"  => "suite/case/initial";
 "suite"  => "finish" : test_finish;
