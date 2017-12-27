@@ -1,25 +1,28 @@
 initial,
 "start":
-    SPEAK:テストスイート[[Test Suite]]を始めましょう。
+    SPEAK:テストスイート[[TEST_SUITE]]を始めましょう。
 ,
 "suite" {
-    "suite/initial",
+    "suite/initial":
+            ACTION: [[CURRENT_SUITE_ID]] = [[TEST_SUITE]],
     "suite/case" {
-        "suite/case/initial",
+        "suite/case/initial":
+            ACTION: [[CURRENT_CASE_ID]] = 1,
         "suite/case/given":
-            SPEAK:ではテストケースID:[[Test Case ID]]、[[Feature]]を始めます。
-                  前提条件 [[Given]]を準備してください。出来たら”テストOK”と言ってください。
+            SPEAK:ではテストケースID:[[CURRENT_CASE_ID]]、[[FEATURE]]を始めます。
+                  前提条件 [[GIVEN]]を準備してください。出来たら”テストOK”と言ってください。
                   もう一度聞きたい場合は”テストもう一度”と言ってください。,
         "suite/case/when":
-            SPEAK:次に、アクション]]When]]を実行してください。
+            SPEAK:次に、アクション[[WHEN]]を実行してください。
                   出来たら”テストOK”と言ってください。
                   もう一度聞きたい場合は”テストもう一度”と言ってください。,
         "suite/case/then":
-            SPEAK:次に、期待値[[Then]]を確認してください。
+            SPEAK:次に、期待値[[THEN]]を確認してください。
                   期待値通りであれば”テストOK”、そうでない場合は”テストNG”、
                   もう一度聞きたい場合は”テストもう一度”と言ってください。,
         "suite/case/result":
-            ACTION: result will put on the spreadsheet;
+            ACTION: result will put on the spreadsheet
+            ACTION: increment [[CURRENT_CASE_ID]];
         "suite/case/initial" => "suite/case/given";
         "suite/case/given" => "suite/case/given": test_back;
         "suite/case/given" => "suite/case/when": test_ok;
@@ -38,11 +41,12 @@ initial,
     "suite/has_next" => "suite/case/initial";
 },
 "finish":
-SPEAK:お疲れ様でした。;
+SPEAK:お疲れ様でした。,
+final;
 
 initial       => "start": start;
 "start"  => "suite/initial";
 "suite/initial"  => "suite/case/initial";
 "suite"  => "finish" : test_finish;
 "suite/no_more_test"   => "finish";
-"finish" => initial;
+"finish" => final;
