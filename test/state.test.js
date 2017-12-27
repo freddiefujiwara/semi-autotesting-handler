@@ -5,17 +5,17 @@ import State from '../src/state';
 describe('State test.', (suite) => {
     it('should have properties ', () => {
         const ghs = new State({
-            speak:"",
-            action:"",
-            conditions:{}
+            speak: '',
+            action: '',
+            conditions: {},
         });
         ghs.should.be.a('object');
         ghs.should.have.property('valiable')
             .with.deep.equal({});
         ghs.should.have.property('speak')
-            .with.equal("");
+            .with.equal('');
         ghs.should.have.property('action')
-            .with.equal("");
+            .with.equal('');
         ghs.should.have.property('conditions')
             .with.deep.equal({});
     });
