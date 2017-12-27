@@ -1,48 +1,48 @@
 initial,
-"test/start":
+"start":
     SPEAK:テストスイート[[Test Suite]]を始めましょう。
 ,
-"test/suite" {
-    "test/suite/initial",
-    "test/suite/case" {
-        "test/suite/case/initial",
-        "test/suite/case/given":
+"suite" {
+    "suite/initial",
+    "suite/case" {
+        "suite/case/initial",
+        "suite/case/given":
             SPEAK:ではテストケースID:[[Test Case ID]]、[[Feature]]を始めます。
                   前提条件 [[Given]]を準備してください。出来たら”テストOK”と言ってください。
                   もう一度聞きたい場合は”テストもう一度”と言ってください。,
-        "test/suite/case/when":
+        "suite/case/when":
             SPEAK:次に、アクション]]When]]を実行してください。
                   出来たら”テストOK”と言ってください。
                   もう一度聞きたい場合は”テストもう一度”と言ってください。,
-        "test/suite/case/then":
+        "suite/case/then":
             SPEAK:次に、期待値[[Then]]を確認してください。
                   期待値通りであれば”テストOK”、そうでない場合は”テストNG”、
                   もう一度聞きたい場合は”テストもう一度”と言ってください。,
-        "test/suite/case/result":
+        "suite/case/result":
             ACTION: result will put on the spreadsheet;
-        "test/suite/case/initial" => "test/suite/case/given";
-        "test/suite/case/given" => "test/suite/case/given": test_back;
-        "test/suite/case/given" => "test/suite/case/when": test_ok;
-        "test/suite/case/when"  => "test/suite/case/when": test_back;
-        "test/suite/case/when"  => "test/suite/case/then": test_ok;
-        "test/suite/case/then"  => "test/suite/case/then": test_back;
-        "test/suite/case/then"  => "test/suite/case/result": test_ok;
-        "test/suite/case/then"  => "test/suite/case/result": test_ng;
+        "suite/case/initial" => "suite/case/given";
+        "suite/case/given" => "suite/case/given": test_back;
+        "suite/case/given" => "suite/case/when": test_ok;
+        "suite/case/when"  => "suite/case/when": test_back;
+        "suite/case/when"  => "suite/case/then": test_ok;
+        "suite/case/then"  => "suite/case/then": test_back;
+        "suite/case/then"  => "suite/case/result": test_ok;
+        "suite/case/then"  => "suite/case/result": test_ng;
     },
-    "test/suite/has_next":
+    "suite/has_next":
         SPEAK:次のテストケースに移ります,
-    "test/suite/no_more_test":
+    "suite/no_more_test":
         SPEAK:テストケースは以上です。;
-    "test/suite/case/result" => "test/suite/has_next": has_next;
-    "test/suite/case/result" => "test/suite/no_more_test": does_not_have_next;
-    "test/suite/has_next" => "test/suite/case/initial";
+    "suite/case/result" => "suite/has_next": has_next;
+    "suite/case/result" => "suite/no_more_test": does_not_have_next;
+    "suite/has_next" => "suite/case/initial";
 },
-"test/finish":
+"finish":
 SPEAK:お疲れ様でした。;
 
-initial       => "test/start": test/start;
-"test/start"  => "test/suite/initial";
-"test/suite/initial"  => "test/suite/case/initial";
-"test/suite"  => "test/finish" : test_finish;
-"test/suite/no_more_test"   => "test/finish";
-"test/finish" => initial;
+initial       => "start": start;
+"start"  => "suite/initial";
+"suite/initial"  => "suite/case/initial";
+"suite"  => "finish" : test_finish;
+"suite/no_more_test"   => "finish";
+"finish" => initial;
