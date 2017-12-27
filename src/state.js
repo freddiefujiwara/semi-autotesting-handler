@@ -4,9 +4,18 @@
 export default class State {
     /**
      * @constructor
+     * @param {Object} valiable
+     * @param {string} speak
+     * @param {string} action
+     * @param {Object} conditions
      */
-    constructor() {
-        this.detector = undefined;
-        this.tts = undefined;
+    constructor({valiable = {},
+        speak,
+        action,
+        conditions = {}}) {
+        this.valiable = valiable;
+        this.speak = speak;
+        this.action = action;
+        this.conditions = conditions;
     }
 }
