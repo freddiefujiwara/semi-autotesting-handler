@@ -1,0 +1,163 @@
+{
+    "states": [
+        {
+            "name": "initial",
+            "type": "initial"
+        },
+        {
+            "name": "start",
+            "type": "regular",
+            "activities": "SPEAK:テストスイート[[TEST_SUITE]]を始めましょう。"
+        },
+        {
+            "name": "suite",
+            "type": "composite",
+            "statemachine": {
+                "states": [
+                    {
+                        "name": "suite/initial",
+                        "type": "regular",
+                        "activities": "ACTION: [[CURRENT_SUITE_ID]] = [[TEST_SUITE]]"
+                    },
+                    {
+                        "name": "suite/case",
+                        "type": "composite",
+                        "statemachine": {
+                            "states": [
+                                {
+                                    "name": "suite/case/initial",
+                                    "type": "regular",
+                                    "activities": "ACTION: [[CURRENT_CASE_ID]] = 1"
+                                },
+                                {
+                                    "name": "suite/case/given",
+                                    "type": "regular",
+                                    "activities": "SPEAK:ではテストケースID:[[CURRENT_CASE_ID]]、[[FEATURE]]を始めます。\n                  前提条件 [[GIVEN]]を準備してください。出来たら”テストOK”と言ってください。\n                  もう一度聞きたい場合は”テストもう一度”と言ってください。"
+                                },
+                                {
+                                    "name": "suite/case/when",
+                                    "type": "regular",
+                                    "activities": "SPEAK:次に、アクション[[WHEN]]を実行してください。\n                  出来たら”テストOK”と言ってください。\n                  もう一度聞きたい場合は”テストもう一度”と言ってください。"
+                                },
+                                {
+                                    "name": "suite/case/then",
+                                    "type": "regular",
+                                    "activities": "SPEAK:次に、期待値[[THEN]]を確認してください。\n                  期待値通りであれば”テストOK”、そうでない場合は”テストNG”、\n                  もう一度聞きたい場合は”テストもう一度”と言ってください。"
+                                },
+                                {
+                                    "name": "suite/case/result",
+                                    "type": "regular",
+                                    "activities": "ACTION: result will put on the spreadsheet\n            ACTION: increment [[CURRENT_CASE_ID]]"
+                                }
+                            ],
+                            "transitions": [
+                                {
+                                    "from": "suite/case/initial",
+                                    "to": "suite/case/given"
+                                },
+                                {
+                                    "from": "suite/case/given",
+                                    "to": "suite/case/given",
+                                    "label": "test_back"
+                                },
+                                {
+                                    "from": "suite/case/given",
+                                    "to": "suite/case/when",
+                                    "label": "test_ok"
+                                },
+                                {
+                                    "from": "suite/case/when",
+                                    "to": "suite/case/when",
+                                    "label": "test_back"
+                                },
+                                {
+                                    "from": "suite/case/when",
+                                    "to": "suite/case/then",
+                                    "label": "test_ok"
+                                },
+                                {
+                                    "from": "suite/case/then",
+                                    "to": "suite/case/then",
+                                    "label": "test_back"
+                                },
+                                {
+                                    "from": "suite/case/then",
+                                    "to": "suite/case/result",
+                                    "label": "test_ok"
+                                },
+                                {
+                                    "from": "suite/case/then",
+                                    "to": "suite/case/result",
+                                    "label": "test_ng"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "suite/has_next",
+                        "type": "regular",
+                        "activities": "SPEAK:次のテストケースに移ります"
+                    },
+                    {
+                        "name": "suite/no_more_test",
+                        "type": "regular",
+                        "activities": "SPEAK:テストケースは以上です。"
+                    }
+                ],
+                "transitions": [
+                    {
+                        "from": "suite/case/result",
+                        "to": "suite/has_next",
+                        "label": "has_next"
+                    },
+                    {
+                        "from": "suite/case/result",
+                        "to": "suite/no_more_test",
+                        "label": "does_not_have_next"
+                    },
+                    {
+                        "from": "suite/has_next",
+                        "to": "suite/case/initial"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "finish",
+            "type": "regular",
+            "activities": "SPEAK:お疲れ様でした。"
+        },
+        {
+            "name": "final",
+            "type": "final"
+        }
+    ],
+    "transitions": [
+        {
+            "from": "initial",
+            "to": "start",
+            "label": "test_start"
+        },
+        {
+            "from": "start",
+            "to": "suite/initial"
+        },
+        {
+            "from": "suite/initial",
+            "to": "suite/case/initial"
+        },
+        {
+            "from": "suite",
+            "to": "finish",
+            "label": "test_finish"
+        },
+        {
+            "from": "suite/no_more_test",
+            "to": "finish"
+        },
+        {
+            "from": "finish",
+            "to": "final"
+        }
+    ]
+}
