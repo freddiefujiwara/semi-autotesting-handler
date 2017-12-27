@@ -1,0 +1,41 @@
+initial,
+"test_start":
+    SPEAK:Let's get started "[[Test Suite]]"
+,
+"test_suite" {
+    "test_case" {
+        "given":
+            SPEAK:Let's start test case ID: "[[ID]]"
+            and Feature "[[Feature]]",
+        "when":
+            SPEAK:Please do "[[When]]",
+        "then":
+            SPEAK:Please confirm "[[Then]]",
+        "result":
+            ACTION: result will put on the spreadsheet;
+        "test_case" => "given";
+        "given" => "given": test_back;
+        "given" => "when": test_ok;
+        "when"  => "when": test_back;
+        "when"  => "then": test_ok;
+        "then"  => "then": test_back;
+        "then"  => "result": test_ok;
+        "then"  => "result": test_ng;
+    },
+    "has_next":
+        SPEAK:You have next test,
+    "no_more_test":
+        SPEAK:Your tests are finished;
+    "test_suite"  => "test_case";
+    "result" => "has_next": has_next;
+    "result" => "no_more_test": does_not_have_next;
+    "has_next" => "test_case";
+},
+"test_finish":
+SPEAK:Thank you for your hard work;
+
+initial       => "test_start": test_start;
+"test_start"  => "test_suite";
+"test_suite"  => "test_finish" : test_finish;
+"no_more_test"   => "test_finish";
+"test_finish" => initial;
