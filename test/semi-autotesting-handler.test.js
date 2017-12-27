@@ -7,7 +7,7 @@ describe('SemiAutotestingHandler test.', (suite) => {
         const ghs = new SemiAutotestingHandler();
         ghs.should.be.a('object');
     });
-    it('should run properly ',  () => {
+    it('should run properly ', () => {
         const ghs = new SemiAutotestingHandler();
         ghs.should.have.property('run').with.be.a('function');
     });
