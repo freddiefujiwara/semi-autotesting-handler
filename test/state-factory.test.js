@@ -6,7 +6,7 @@ import StateFactory from '../src/state-factory';
 describe('StateFactory test.', (suite) => {
     let sf = undefined;
     beforeEach(() => {
-        sf  = new StateFactory('test/semi-autotesting-handler.sm')
+        sf = new StateFactory('test/semi-autotesting-handler.sm');
     });
     it('should have properties ', () => {
         sf.should.be.a('object');
@@ -26,7 +26,7 @@ describe('StateFactory test.', (suite) => {
         sf.should.have.property('load')
             .with.be.a('function');
 
-        var expectedObject = JSON.parse(
+        let expectedObject = JSON.parse(
             fs.readFileSync('test/semi-autotesting-handler.json',
                 'utf8'));
         (await sf.load()).should.be.a('object')

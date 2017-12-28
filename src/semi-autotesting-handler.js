@@ -7,8 +7,7 @@ export default class SemiAutotestingHandler {
      * @constructor
      */
     constructor() {
-        this.detector = undefined;
-        this.tts = undefined;
+        this.detector = new StateFactory();
     }
     /**
      * run commands

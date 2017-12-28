@@ -4,18 +4,15 @@
 export default class State {
     /**
      * @constructor
-     * @param {Object} valiable
-     * @param {string} speak
-     * @param {string} action
+     * @param {string} name
+     * @param {string} parent
+     * @param {string} activities
      * @param {Object} conditions
      */
-    constructor({valiable = {},
-        speak,
-        action,
-        conditions = {}}) {
-        this.valiable = valiable;
-        this.speak = speak;
-        this.action = action;
-        this.conditions = conditions;
+    constructor({name, parent, activities, decision}) {
+        this.name = name;
+        this.parent = parent;
+        this.activities = activities;
+        this.decision = decision;
     }
 }
