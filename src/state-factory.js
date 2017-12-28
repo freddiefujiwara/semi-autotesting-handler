@@ -49,23 +49,23 @@ export default class StateFactory {
     async walk(node, parent = undefined) {
         if (node.hasOwnProperty('states')) {
             for (let child of node.states) {
-                if (child.hasOwnProperty('statemachine') &&
-                    child.statemachine.hasOwnProperty('states')
-                ) {
-                    await this.walk(child.statemachine, child.name);
-                }
                 this.stateObjects[child.name] = new State({name: child.name,
                     parent: parent,
                     activities: child.activities,
                 });
+                if (child.hasOwnProperty('statemachine') &&
+                    child.statemachine.hasOwnProperty('states')
+                ) {
+                    await this.walk(child.statemachine, this.stateObjects[child.name]);
+                }
             }
         }
         if (node.hasOwnProperty('transitions')) {
             for (let child of node.transitions) {
-                this.stateObjects[child.from].decision =
-                    this.stateObjects[child.from].decision || {};
+                this.stateObjects[child.from].decisionMap =
+                    this.stateObjects[child.from].decisionMap || {};
                 this.stateObjects[child.from]
-                    .decision[child.label || 'default'] = child.to;
+                    .decisionMap[child.label || 'default'] = this.stateObjects[child.to];
             }
         }
     }
