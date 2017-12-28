@@ -52,7 +52,7 @@ describe('StateFactory test.', (suite) => {
             fs.readFileSync('test/semi-autotesting-handler.json',
                 'utf8'));
         await sf.walk(stateMachineObject);
-//import util from 'util';
+// import util from 'util';
 //        console.log(util.inspect(sf.stateObjects,false,null));
     });
 });

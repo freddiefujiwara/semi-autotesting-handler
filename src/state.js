@@ -19,27 +19,32 @@ export default class State {
     }
     /**
      * toString
-     * return this as a JSON 
+     * return this as a JSON
      * @return {string}
      */
-    toString(){
+    toString() {
         return JSON.stringify({
-            name:this.name, 
-            parent:this.parent, 
-            activities:this.activities, 
-            decisionMap:this.decisionMap, 
-            valiable:this.valiable
+            name: this.name,
+            activities: this.activities,
+            valiable: this.valiable,
         });
     }
     /**
      * next
      * @param {string} decision
+     * @param {State} object
      * @return {State}
      */
-    next(decision,object = this){
-        if(object.decisionMap.hasOwnProperty(decision)){
+    next(decision = 'default', object = this) {
+        if (object.decisionMap.hasOwnProperty(decision)
+            && typeof object.decisionMap[decision] === 'object'
+        ) {
             return object.decisionMap[decision];
         }
-        return this.next(decision,object.parent);
+        if (object.hasOwnProperty('parent')
+            && typeof object.parent === 'object') {
+            return this.next(decision, object.parent);
+        }
+        throw new Error(`${object.name}:${decision} not found`);
     }
 }

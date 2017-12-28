@@ -56,7 +56,8 @@ export default class StateFactory {
                 if (child.hasOwnProperty('statemachine') &&
                     child.statemachine.hasOwnProperty('states')
                 ) {
-                    await this.walk(child.statemachine, this.stateObjects[child.name]);
+                    await this.walk(child.statemachine,
+                        this.stateObjects[child.name]);
                 }
             }
         }
@@ -65,7 +66,8 @@ export default class StateFactory {
                 this.stateObjects[child.from].decisionMap =
                     this.stateObjects[child.from].decisionMap || {};
                 this.stateObjects[child.from]
-                    .decisionMap[child.label || 'default'] = this.stateObjects[child.to];
+                    .decisionMap[child.label || 'default']
+                    = this.stateObjects[child.to];
             }
         }
     }
