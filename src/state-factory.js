@@ -1,5 +1,6 @@
 import smcat from 'state-machine-cat';
 import fs from 'fs';
+import State from './state';
 /**
  ** main class of State
  */
@@ -11,6 +12,7 @@ export default class StateFactory {
      */
     constructor(stateMachineFile = '~/.semi-autotesting-handler.sm') {
         this.stateMachineFile = stateMachineFile;
+        this.stateObjects = {};
     }
 
     /**
@@ -38,5 +40,33 @@ export default class StateFactory {
                     }
                 });
         });
+    }
+    /**
+     * walk
+     * @param {object} node
+     * @param {string} parent
+     * @return {Promise}
+     */
+    async walk(node, parent = undefined){
+        if(node.hasOwnProperty('states')){
+            for(let child of node.states){
+                if(child.hasOwnProperty('statemachine') &&
+                    child.statemachine.hasOwnProperty('states')
+                ){
+                    await this.walk(child.statemachine,child.name);
+                }
+                this.stateObjects[child.name] = {
+                    parent: parent,
+                    activities: child.activities
+                };
+            }
+        }
+        if(node.hasOwnProperty('transitions')){
+            for(let child of node.transitions){
+                this.stateObjects[child.from].decision = 
+                    this.stateObjects[child.from].decision  || {};
+                this.stateObjects[child.from].decision[child.label || 'default'] = child.to;
+            }
+        }
     }
 }

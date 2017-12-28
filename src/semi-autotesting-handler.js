@@ -1,3 +1,4 @@
+import StateFactory from './state-factory';
 /**
  ** main class of SemiAutotestingHandler
  */
