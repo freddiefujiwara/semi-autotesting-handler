@@ -23,7 +23,7 @@ describe('State test.', (suite) => {
             .with.equal('activities');
         s.should.have.property('decisionMap')
             .with.deep.equal({});
-        s.should.have.property('valiable')
+        s.should.have.property('valiables')
             .with.deep.equal({});
     });
     it('should convert to string properly', () => {
@@ -74,8 +74,18 @@ describe('State test.', (suite) => {
             .should.have.property('name').with.equal('suite/case/result');
 
         // suite/case/result
-        sf.stateObjects['suite/case/result'].next('test_finish')
-            .should.have.property('name').with.equal('finish');
+        sf.stateObjects['suite/case/result'].valiables = {
+            key1: 'value1',
+            key2: 'value2',
+            key3: 'value3',
+        };
+        let finish = sf.stateObjects['suite/case/result'].next('test_finish');
+        finish.should.have.property('name').with.equal('finish');
+        finish.should.have.property('valiables').with.deep.equal({
+            key1: 'value1',
+            key2: 'value2',
+            key3: 'value3',
+        });
         sf.stateObjects['suite/case/result'].next('has_next')
             .should.have.property('name').with.equal('suite/has_next');
         sf.stateObjects['suite/case/result'].next('does_not_have_next')
