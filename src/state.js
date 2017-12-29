@@ -1,4 +1,6 @@
-import vm from 'vm';
+import child_process from 'child_process';
+import util from 'util' 
+const exec = util.promisify(child_process.exec);
 /**
  ** main class of State
  */
@@ -54,16 +56,20 @@ export default class State {
     /**
      * action
      */
-    action(){
+    async action() {
         if (typeof this.activities === 'string') {
-            Object.assign(
-                this.valiables
-                , {
-                    name:this.name
+            const activities = this.activities.split('\n')
+                .map((value) => {
+                    return value.replace('；', ';');
                 });
-            const script = new vm.Script(this.activities); 
-            const context = vm.createContext(this.valiables);
-            script.runInContext(context);
+            for( let command of activities){
+                const { stdout, stderr } = await exec(command);
+                if(stdout.startsWith('SAH_COMMAND=')){
+                    process.env['SAH_COMMAND'] = stdout.replace('SAH_COMMAND=','').replace(/\n/,'');
+                }
+                console.log('stdout:', stdout);
+                console.log('stderr:', stderr);
+            }
         }
     }
 }

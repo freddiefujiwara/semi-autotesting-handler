@@ -9,7 +9,7 @@ describe('State test.', (suite) => {
         s = new State({
             name: 'name',
             parent: 'parent',
-            activities: 'name = name + ":DONE";',
+            activities: 'export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND\necho Hello world\necho $SAH_SUITE_ID；',
             decisionMap: {},
         });
     });
@@ -20,7 +20,7 @@ describe('State test.', (suite) => {
         s.should.have.property('parent')
             .with.equal('parent');
         s.should.have.property('activities')
-            .with.equal('name = name + ":DONE";');
+            .with.equal('export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND\necho Hello world\necho $SAH_SUITE_ID；');
         s.should.have.property('decisionMap')
             .with.deep.equal({});
         s.should.have.property('valiables')
@@ -31,10 +31,12 @@ describe('State test.', (suite) => {
             .with.be.a('function');
         s.toString().should.be.a('string');
     });
-    it('should action properly', () => {
+    it('should action properly', async () => {
         s.should.have.property('action')
             .with.be.a('function');
-        s.action();
+        process.env['SAH_SUITE_ID'] = 'dummy_suite_id';
+        await s.action();
+        process.env['SAH_COMMAND'].should.equal('dummy_command');
     });
     it('should move next properly', async () => {
         s.should.have.property('next')
