@@ -9,7 +9,10 @@ describe('State test.', (suite) => {
         s = new State({
             name: 'name',
             parent: 'parent',
-            activities: 'export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND\necho Hello world\necho $SAH_SUITE_ID；',
+            activities:
+            `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
+            echo Hello world
+            echo $SAH_SUITE_ID；`,
             decisionMap: {},
         });
     });
@@ -20,7 +23,10 @@ describe('State test.', (suite) => {
         s.should.have.property('parent')
             .with.equal('parent');
         s.should.have.property('activities')
-            .with.equal('export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND\necho Hello world\necho $SAH_SUITE_ID；');
+            .with.equal(
+            `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
+            echo Hello world
+            echo $SAH_SUITE_ID；`);
         s.should.have.property('decisionMap')
             .with.deep.equal({});
         s.should.have.property('valiables')
