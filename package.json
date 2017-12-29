@@ -61,6 +61,6 @@
         "state-machine-cat": "^2.1.4"
     },
     "engines": {
-        "node": ">=7.6"
+        "node": ">=8.0
     }
 }
