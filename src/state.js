@@ -1,3 +1,4 @@
+import vm from 'vm';
 /**
  ** main class of State
  */
@@ -49,5 +50,20 @@ export default class State {
             return this.next(decision, object.parent);
         }
         throw new Error(`${object.name}:${decision} not found`);
+    }
+    /**
+     * action
+     */
+    action(){
+        if (typeof this.activities === 'string') {
+            Object.assign(
+                this.valiables
+                , {
+                    name:this.name
+                });
+            const script = new vm.Script(this.activities); 
+            const context = vm.createContext(this.valiables);
+            script.runInContext(context);
+        }
     }
 }

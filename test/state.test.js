@@ -9,7 +9,7 @@ describe('State test.', (suite) => {
         s = new State({
             name: 'name',
             parent: 'parent',
-            activities: 'activities',
+            activities: 'name = name + ":DONE";',
             decisionMap: {},
         });
     });
@@ -20,7 +20,7 @@ describe('State test.', (suite) => {
         s.should.have.property('parent')
             .with.equal('parent');
         s.should.have.property('activities')
-            .with.equal('activities');
+            .with.equal('name = name + ":DONE";');
         s.should.have.property('decisionMap')
             .with.deep.equal({});
         s.should.have.property('valiables')
@@ -30,6 +30,11 @@ describe('State test.', (suite) => {
         s.should.have.property('toString')
             .with.be.a('function');
         s.toString().should.be.a('string');
+    });
+    it('should action properly', () => {
+        s.should.have.property('action')
+            .with.be.a('function');
+        s.action();
     });
     it('should move next properly', async () => {
         s.should.have.property('next')
