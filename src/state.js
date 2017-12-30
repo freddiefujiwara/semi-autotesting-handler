@@ -1,6 +1,5 @@
-import cp from 'child_process';
+import {exec} from 'child_process';
 import util from 'util';
-const exec = util.promisify(cp.exec);
 /**
  ** main class of State
  */
@@ -63,7 +62,13 @@ export default class State {
                     return value.replace('；', ';');
                 });
             for ( let command of activities) {
-                const {stdout, stderr} = await exec(command);
+                const {stdout, stderr} = await (new Promise(
+                    (resolve, reject) => {
+                        exec(command,(err,stdout,stderr) => {
+                            if(err) return reject(err);
+                            resolve({stdout,stderr});
+                        });
+                    }));
                 if (stdout.startsWith('SAH_COMMAND=')) {
                     process.env['SAH_COMMAND'] = stdout
                         .replace('SAH_COMMAND=', '')
