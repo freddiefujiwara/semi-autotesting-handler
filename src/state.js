@@ -1,5 +1,4 @@
 import {exec} from 'child_process';
-import util from 'util';
 /**
  ** main class of State
  */
@@ -64,9 +63,9 @@ export default class State {
             for ( let command of activities) {
                 const {stdout, stderr} = await (new Promise(
                     (resolve, reject) => {
-                        exec(command,(err,stdout,stderr) => {
-                            if(err) return reject(err);
-                            resolve({stdout,stderr});
+                        exec(command, (err, stdout, stderr) => {
+                            if (err) return reject(err);
+                            resolve({stdout, stderr});
                         });
                     }));
                 if (stdout.startsWith('SAH_COMMAND=')) {
