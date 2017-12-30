@@ -41,7 +41,7 @@ describe('State test.', (suite) => {
         s.should.have.property('action')
             .with.be.a('function');
         process.env['SAH_SUITE_ID'] = 'dummy_suite_id';
-        if(!process.platform.startsWith('win')){
+        if (!process.platform.startsWith('win')) {
             await s.action();
             process.env['SAH_COMMAND'].should.equal('dummy_command');
         }
