@@ -24,7 +24,7 @@ describe('State test.', (suite) => {
             .with.equal('parent');
         s.should.have.property('activities')
             .with.equal(
-            `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
+                `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
             echo Hello world
             echo $SAH_SUITE_ID；`);
         s.should.have.property('decisionMap')
@@ -41,8 +41,10 @@ describe('State test.', (suite) => {
         s.should.have.property('action')
             .with.be.a('function');
         process.env['SAH_SUITE_ID'] = 'dummy_suite_id';
-        await s.action();
-        process.env['SAH_COMMAND'].should.equal('dummy_command');
+        if(!process.platform.startsWith('win')){
+            await s.action();
+            process.env['SAH_COMMAND'].should.equal('dummy_command');
+        }
     });
     it('should move next properly', async () => {
         s.should.have.property('next')
