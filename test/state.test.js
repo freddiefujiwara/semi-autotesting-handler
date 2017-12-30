@@ -9,7 +9,10 @@ describe('State test.', (suite) => {
         s = new State({
             name: 'name',
             parent: 'parent',
-            activities: 'activities',
+            activities:
+            `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
+            echo Hello world
+            echo $SAH_SUITE_ID；`,
             decisionMap: {},
         });
     });
@@ -20,16 +23,28 @@ describe('State test.', (suite) => {
         s.should.have.property('parent')
             .with.equal('parent');
         s.should.have.property('activities')
-            .with.equal('activities');
+            .with.equal(
+                `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
+            echo Hello world
+            echo $SAH_SUITE_ID；`);
         s.should.have.property('decisionMap')
             .with.deep.equal({});
-        s.should.have.property('valiable')
+        s.should.have.property('valiables')
             .with.deep.equal({});
     });
     it('should convert to string properly', () => {
         s.should.have.property('toString')
             .with.be.a('function');
         s.toString().should.be.a('string');
+    });
+    it('should action properly', async () => {
+        s.should.have.property('action')
+            .with.be.a('function');
+        process.env['SAH_SUITE_ID'] = 'dummy_suite_id';
+        if (!process.platform.startsWith('win')) {
+            await s.action();
+            process.env['SAH_COMMAND'].should.equal('dummy_command');
+        }
     });
     it('should move next properly', async () => {
         s.should.have.property('next')
@@ -74,8 +89,18 @@ describe('State test.', (suite) => {
             .should.have.property('name').with.equal('suite/case/result');
 
         // suite/case/result
-        sf.stateObjects['suite/case/result'].next('test_finish')
-            .should.have.property('name').with.equal('finish');
+        sf.stateObjects['suite/case/result'].valiables = {
+            key1: 'value1',
+            key2: 'value2',
+            key3: 'value3',
+        };
+        let finish = sf.stateObjects['suite/case/result'].next('test_finish');
+        finish.should.have.property('name').with.equal('finish');
+        finish.should.have.property('valiables').with.deep.equal({
+            key1: 'value1',
+            key2: 'value2',
+            key3: 'value3',
+        });
         sf.stateObjects['suite/case/result'].next('has_next')
             .should.have.property('name').with.equal('suite/has_next');
         sf.stateObjects['suite/case/result'].next('does_not_have_next')
