@@ -1,5 +1,5 @@
 {
-    "name": "semi-autotesting-handler",
+    "name": "state-machine-exec",
     "version": "0.0.1",
     "description": "Command line client for chromeless",
     "scripts": {
@@ -15,9 +15,9 @@
         "postinstall": "npm run requirements-check"
     },
     "bin": {
-        "semi-autotesting-handler": "index.js"
+        "state-machine-exec": "index.js"
     },
-    "main": "lib/semi-autotesting-handler.js",
+    "main": "lib/state-machine-exec.js",
     "files": [
         "lib",
         "index.js",
@@ -25,7 +25,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/freddiefujiwara/semi-autotesting-handler.git"
+        "url": "git+https://github.com/freddiefujiwara/state-machine-exec.git"
     },
     "keywords": [
         "cli",
@@ -36,9 +36,9 @@
     "author": "Fumikazu Fujiwara <npm@ze.gs> (http://freddiefujiwara.com)",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/freddiefujiwara/semi-autotesting-handler/issues"
+        "url": "https://github.com/freddiefujiwara/state-machine-exec/issues"
     },
-    "homepage": "https://github.com/freddiefujiwara/semi-autotesting-handler#readme",
+    "homepage": "https://github.com/freddiefujiwara/state-machine-exec#readme",
     "devDependencies": {
         "babel-cli": "^6.24.1",
         "babel-core": "^6.25.0",

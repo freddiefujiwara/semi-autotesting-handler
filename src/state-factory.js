@@ -10,7 +10,7 @@ export default class StateFactory {
      * @param {string} stateMachineFile
      * @param {Object} conditions
      */
-    constructor(stateMachineFile = '~/.semi-autotesting-handler.sm') {
+    constructor(stateMachineFile = '~/.state-machine-exec.sm') {
         this.stateMachineFile = stateMachineFile;
         this.stateObjects = {};
     }

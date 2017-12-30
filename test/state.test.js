@@ -50,7 +50,7 @@ describe('State test.', (suite) => {
         s.should.have.property('next')
             .with.be.a('function');
         s.toString().should.be.a('string');
-        const sf = new StateFactory('test/semi-autotesting-handler.sm');
+        const sf = new StateFactory('test/state-machine-exec.sm');
         await sf.walk(await sf.load());
         // initial
         sf.stateObjects['initial'].next('test_start')
