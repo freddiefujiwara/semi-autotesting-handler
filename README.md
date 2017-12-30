@@ -1,11 +1,11 @@
-[![Build Status](https://travis-ci.org/freddiefujiwara/semi-autotesting-handler.svg?branch=master)](https://travis-ci.org/freddiefujiwara/semi-autotesting-handler)
-[![Build status](https://ci.appveyor.com/api/projects/status/a14pxw5roh4jecv2?svg=true)](https://ci.appveyor.com/project/freddiefujiwara/semi-autotesting-handler)
-[![CircleCI](https://circleci.com/gh/freddiefujiwara/semi-autotesting-handler.svg?style=svg)](https://circleci.com/gh/freddiefujiwara/semi-autotesting-handler)
-[![npm version](https://badge.fury.io/js/semi-autotesting-handler.svg)](https://badge.fury.io/js/semi-autotesting-handler)
-[![codecov](https://codecov.io/gh/freddiefujiwara/semi-autotesting-handler/branch/master/graph/badge.svg)](https://codecov.io/gh/freddiefujiwara/semi-autotesting-handler)
-[![dependencies Status](https://david-dm.org/freddiefujiwara/semi-autotesting-handler/status.svg)](https://david-dm.org/freddiefujiwara/semi-autotesting-handler)
+[![Build Status](https://travis-ci.org/freddiefujiwara/state-machine-exec.svg?branch=master)](https://travis-ci.org/freddiefujiwara/state-machine-exec)
+[![Build status](https://ci.appveyor.com/api/projects/status/a14pxw5roh4jecv2?svg=true)](https://ci.appveyor.com/project/freddiefujiwara/state-machine-exec)
+[![CircleCI](https://circleci.com/gh/freddiefujiwara/state-machine-exec.svg?style=svg)](https://circleci.com/gh/freddiefujiwara/state-machine-exec)
+[![npm version](https://badge.fury.io/js/state-machine-exec.svg)](https://badge.fury.io/js/state-machine-exec)
+[![codecov](https://codecov.io/gh/freddiefujiwara/state-machine-exec/branch/master/graph/badge.svg)](https://codecov.io/gh/freddiefujiwara/state-machine-exec)
+[![dependencies Status](https://david-dm.org/freddiefujiwara/state-machine-exec/status.svg)](https://david-dm.org/freddiefujiwara/state-machine-exec)
 
-# semi-autotesting-handler
+# state-machine-exec
 Command line client for chromeless
 
 ## Requirements
@@ -15,12 +15,12 @@ Command line client for chromeless
 ## Installation
 
 ```bash
-npm i -g semi-autotesting-handler
+npm i -g state-machine-exec
 ```
 
 ## Usage
 ```bash                                                                                     
-  Usage: semi-autotesting-handler <host> <text>                                                                                    
+  Usage: state-machine-exec <host> <text>                                                                                    
                                                                                                                          
                                                                                                                                
                                                                                                                                
@@ -32,13 +32,13 @@ npm i -g semi-autotesting-handler
 
 ## Example
 ```bash
-semi-autotesting-handler 192.168.1.101 "Hello I'm Freddie"
+state-machine-exec 192.168.1.101 "Hello I'm Freddie"
 ```
 
 ## FAQ
 
-[FAQ](https://github.com/freddiefujiwara/semi-autotesting-handler/wiki/FAQ)
+[FAQ](https://github.com/freddiefujiwara/state-machine-exec/wiki/FAQ)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/freddiefujiwara/semi-autotesting-handler
+Bug reports and pull requests are welcome on GitHub at https://github.com/freddiefujiwara/state-machine-exec

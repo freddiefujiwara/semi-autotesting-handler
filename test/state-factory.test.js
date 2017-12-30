@@ -6,13 +6,13 @@ import StateFactory from '../src/state-factory';
 describe('StateFactory test.', (suite) => {
     let sf = undefined;
     beforeEach(() => {
-        sf = new StateFactory('test/semi-autotesting-handler.sm');
+        sf = new StateFactory('test/state-machine-exec.sm');
     });
     it('should have properties ', () => {
         sf.should.be.a('object');
 
         sf.should.have.property('stateMachineFile')
-            .with.equal('test/semi-autotesting-handler.sm');
+            .with.equal('test/state-machine-exec.sm');
 
         sf.should.have.property('stateObjects')
             .with.deep.equal({});
@@ -27,7 +27,7 @@ describe('StateFactory test.', (suite) => {
             .with.be.a('function');
 
         let expectedObject = JSON.parse(
-            fs.readFileSync('test/semi-autotesting-handler.json',
+            fs.readFileSync('test/state-machine-exec.json',
                 'utf8'));
         (await sf.load()).should.be.a('object')
             .with.deep.equal(expectedObject);
@@ -49,7 +49,7 @@ describe('StateFactory test.', (suite) => {
         sf.should.have.property('walk')
             .with.be.a('function');
         const stateMachineObject = JSON.parse(
-            fs.readFileSync('test/semi-autotesting-handler.json',
+            fs.readFileSync('test/state-machine-exec.json',
                 'utf8'));
         await sf.walk(stateMachineObject);
 // import util from 'util';

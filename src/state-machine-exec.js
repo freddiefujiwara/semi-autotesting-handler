@@ -1,8 +1,8 @@
 import StateFactory from './state-factory';
 /**
- ** main class of SemiAutotestingHandler
+ ** main class of StateMachineExec
  */
-export default class SemiAutotestingHandler {
+export default class StateMachineExec {
     /**
      * @constructor
      */

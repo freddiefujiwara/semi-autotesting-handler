@@ -9,7 +9,7 @@ let textValue = undefined;
 program
     .version(pkg.version)
     .description(pkg.description)
-    .usage('semi-autotesting-handler <host> <text>')
+    .usage('state-machine-exec <host> <text>')
     .arguments('<host> <text>')
     .action(function(host,text){
         hostValue = host;
@@ -21,8 +21,8 @@ if(typeof hostValue === 'undefined' || typeof textValue === 'undefined'){
     process.exit(1);
 }
 
-let SemiAutotestingHandler = require('./lib/semi-autotesting-handler');
-let ghs = new SemiAutotestingHandler();
+let StateMachineExec = require('./lib/state-machine-exec');
+let ghs = new StateMachineExec();
 ghs.run(hostValue,textValue)
     .then(function(){
     })
