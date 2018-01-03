@@ -46,6 +46,13 @@ describe('State test.', (suite) => {
         if (!process.platform.startsWith('win')) {
             await s.action();
             process.env['SME_COMMAND'].should.equal('dummy_command');
+            const obj = JSON.parse(s.toString());
+            obj.name.should.equal('name');
+            obj.activity_line.should.equal(3);
+            obj.environments.should.have.property('SME_COMMAND')
+            .with.equal('dummy_command');
+            obj.environments.should.have.property('SME_SUITE_ID')
+            .with.equal('dummy_suite_id');
         }
     });
     it('should move next properly', async () => {

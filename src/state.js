@@ -33,7 +33,7 @@ export default class State {
             name: this.name,
             activities: this.activities,
             environments: environments,
-            activity_line:this.activity_line
+            activity_line: this.activity_line,
         }, undefined, '\t');
     }
     /**
