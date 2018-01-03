@@ -29,13 +29,15 @@ describe('State test.', (suite) => {
             echo $SAH_SUITE_ID；`);
         s.should.have.property('decisionMap')
             .with.deep.equal({});
-        s.should.have.property('valiables')
-            .with.deep.equal({});
+        s.should.have.property('activity_line')
+            .with.deep.equal(0);
     });
     it('should convert to string properly', () => {
         s.should.have.property('toString')
             .with.be.a('function');
-        s.toString().should.be.a('string');
+        const str = s.toString();
+        str.should.be.a('string');
+        console.log(str);
     });
     it('should action properly', async () => {
         s.should.have.property('action')
@@ -89,18 +91,8 @@ describe('State test.', (suite) => {
             .should.have.property('name').with.equal('suite/case/result');
 
         // suite/case/result
-        sf.stateObjects['suite/case/result'].valiables = {
-            key1: 'value1',
-            key2: 'value2',
-            key3: 'value3',
-        };
         let finish = sf.stateObjects['suite/case/result'].next('test_finish');
         finish.should.have.property('name').with.equal('finish');
-        finish.should.have.property('valiables').with.deep.equal({
-            key1: 'value1',
-            key2: 'value2',
-            key3: 'value3',
-        });
         sf.stateObjects['suite/case/result'].next('has_next')
             .should.have.property('name').with.equal('suite/has_next');
         sf.stateObjects['suite/case/result'].next('does_not_have_next')

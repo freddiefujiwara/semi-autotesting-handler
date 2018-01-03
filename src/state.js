@@ -9,14 +9,13 @@ export default class State {
      * @param {string} parent
      * @param {string} activities
      * @param {Object} dicision
-     * @param {Object} valiables
      */
-    constructor({name, parent, activities, decisionMap={}, valiables={}}) {
+    constructor({name, parent, activities, decisionMap={}}) {
         this.name = name;
         this.parent = parent;
         this.activities = activities;
+        this.activity_line = 0;
         this.decisionMap = decisionMap;
-        this.valiables = valiables;
     }
     /**
      * toString
@@ -24,11 +23,18 @@ export default class State {
      * @return {string}
      */
     toString() {
+        let environments = {};
+        Object.keys(process.env).map((key) => {
+            if (key.startsWith('SAH_')) {
+                environments[key] = process.env[key];
+            }
+        });
         return JSON.stringify({
             name: this.name,
             activities: this.activities,
-            valiables: this.valiables,
-        });
+            environments: environments,
+            activity_line:this.activity_line
+        }, undefined, '\t');
     }
     /**
      * next
@@ -40,9 +46,6 @@ export default class State {
         if (object.decisionMap.hasOwnProperty(decision)
             && typeof object.decisionMap[decision] === 'object'
         ) {
-            Object.assign(
-                object.decisionMap[decision].valiables
-                , this.valiables);
             return object.decisionMap[decision];
         }
         if (object.hasOwnProperty('parent')
@@ -60,7 +63,9 @@ export default class State {
                 .map((value) => {
                     return value.replace('；', ';');
                 });
-            for ( let command of activities) {
+            for (;this.activity_line < activities.length;
+                this.activity_line++) {
+                const command = activities[this.activity_line];
                 const {stdout, stderr} = await (new Promise(
                     (resolve, reject) => {
                         exec(command, (err, stdout, stderr) => {
