@@ -25,7 +25,7 @@ export default class State {
     toString() {
         let environments = {};
         Object.keys(process.env).map((key) => {
-            if (key.startsWith('SAH_')) {
+            if (key.startsWith('SME_')) {
                 environments[key] = process.env[key];
             }
         });
@@ -73,9 +73,9 @@ export default class State {
                             resolve({stdout, stderr});
                         });
                     }));
-                if (stdout.startsWith('SAH_COMMAND=')) {
-                    process.env['SAH_COMMAND'] = stdout
-                        .replace('SAH_COMMAND=', '')
+                if (stdout.startsWith('SME_COMMAND=')) {
+                    process.env['SME_COMMAND'] = stdout
+                        .replace('SME_COMMAND=', '')
                         .replace(/\n/, '');
                 }
                 console.log('stdout:', stdout);

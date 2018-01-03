@@ -10,9 +10,9 @@ describe('State test.', (suite) => {
             name: 'name',
             parent: 'parent',
             activities:
-            `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
+            `export SME_COMMAND=dummy_command;echo SME_COMMAND=$SME_COMMAND
             echo Hello world
-            echo $SAH_SUITE_ID；`,
+            echo $SME_SUITE_ID；`,
             decisionMap: {},
         });
     });
@@ -24,9 +24,9 @@ describe('State test.', (suite) => {
             .with.equal('parent');
         s.should.have.property('activities')
             .with.equal(
-                `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
+                `export SME_COMMAND=dummy_command;echo SME_COMMAND=$SME_COMMAND
             echo Hello world
-            echo $SAH_SUITE_ID；`);
+            echo $SME_SUITE_ID；`);
         s.should.have.property('decisionMap')
             .with.deep.equal({});
         s.should.have.property('activity_line')
@@ -42,10 +42,10 @@ describe('State test.', (suite) => {
     it('should action properly', async () => {
         s.should.have.property('action')
             .with.be.a('function');
-        process.env['SAH_SUITE_ID'] = 'dummy_suite_id';
+        process.env['SME_SUITE_ID'] = 'dummy_suite_id';
         if (!process.platform.startsWith('win')) {
             await s.action();
-            process.env['SAH_COMMAND'].should.equal('dummy_command');
+            process.env['SME_COMMAND'].should.equal('dummy_command');
         }
     });
     it('should move next properly', async () => {

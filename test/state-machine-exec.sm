@@ -1,24 +1,24 @@
 initial,
 "start":
-    google-home-speaker $GOOGLE_HOME_IP 'テストスイート$SAH_ARGSを始めましょう。'
-    export SAH_SUITE_ID=`cat $HOME/.sah-suites.json | jq .[$COMMAND-1] | sed 's/"//g'`
-    export SAH_CUR_SUITE=`gsjson -s $HOME/.google-spreadsheet.json $SAH_SUITE_ID` ,
+    google-home-speaker $GOOGLE_HOME_IP 'テストスイート$SME_ARGSを始めましょう。'
+    export SME_SUITE_ID=`cat $HOME/.sah-suites.json | jq .[$COMMAND-1] | sed 's/"//g'`
+    export SME_CUR_SUITE=`gsjson -s $HOME/.google-spreadsheet.json $SME_SUITE_ID` ,
 "suite" {
     "suite/initial":
-           export SAH_CUR_CASE_ID=1 ,
+           export SME_CUR_CASE_ID=1 ,
     "suite/case" {
         "suite/case/initial":
             ,
         "suite/case/given":
-            google-home-speaker $GOOGLE_HOME_IP "ではテストケースID:$SAH_CUR_CASE_ID、`echo $SAH_CUR_SUITE | jq .[$SAH_CUR_CASE_ID-1].feature`を始めます。前提条件 `echo $SAH_CUR_SUITE | jq .[$SAH_CUR_CASE_ID-1].given`を準備してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
+            google-home-speaker $GOOGLE_HOME_IP "ではテストケースID:$SME_CUR_CASE_ID、`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].feature`を始めます。前提条件 `echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].given`を準備してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
         "suite/case/when":
-            google-home-speaker $GOOGLE_HOME_IP "次に、アクション`echo $SAH_CUR_SUITE | jq .[$SAH_CUR_CASE_ID-1].when`を実行してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
+            google-home-speaker $GOOGLE_HOME_IP "次に、アクション`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].when`を実行してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
         "suite/case/then":
-            google-home-speaker $GOOGLE_HOME_IP "次に、期待値`echo $SAH_CUR_SUITE | jq .[$SAH_CUR_CASE_ID-1].then`を確認してください。期待値通りであれば”テストOK”、そうでない場合は”テストNG”、もう一度聞きたい場合は”テストもう一度”と言ってください。",                
+            google-home-speaker $GOOGLE_HOME_IP "次に、期待値`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].then`を確認してください。期待値通りであれば”テストOK”、そうでない場合は”テストNG”、もう一度聞きたい場合は”テストもう一度”と言ってください。",                
         "suite/case/result":
             echo TODO:push result to google spreadsheet
-            export SAH_CUR_CASE_ID=`expr $SAH_CUR_CASE_ID + 1`
-            if [ "`echo $SAH_CUR_SUITE | jq .[$SAH_CUR_CASE_ID]`" = null ]； then export SAH_COMMAND=does_not_have_next ； else export SAH_COMMAND=has_next ； fi;
+            export SME_CUR_CASE_ID=`expr $SME_CUR_CASE_ID + 1`
+            if [ "`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID]`" = null ]； then export SME_COMMAND=does_not_have_next ； else export SME_COMMAND=has_next ； fi;
         "suite/case/initial" => "suite/case/given";
         "suite/case/given" => "suite/case/given": test_back;
         "suite/case/given" => "suite/case/when": test_ok;
