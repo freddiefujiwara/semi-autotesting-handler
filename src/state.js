@@ -15,6 +15,7 @@ export default class State {
         this.parent = parent;
         this.activities = activities;
         this.activity_line = 0;
+        this.environments = {};
         this.decisionMap = decisionMap;
     }
     /**
@@ -35,6 +36,18 @@ export default class State {
             environments: environments,
             activity_line: this.activity_line,
         }, undefined, '\t');
+    }
+    /**
+     * fromString
+     * @param {string} JSON expression of State object
+     * return this from JSON
+     */
+    fromString(str) {
+        let obj = JSON.parse(str);
+        this.name = obj.name;
+        this.activities = obj.activities;
+        this.environments = obj.environments;
+        this.activity_line = obj.activity_line;
     }
     /**
      * next

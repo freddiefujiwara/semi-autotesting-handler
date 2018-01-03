@@ -27,17 +27,24 @@ describe('State test.', (suite) => {
                 `export SME_COMMAND=dummy_command;echo SME_COMMAND=$SME_COMMAND
             echo Hello world
             echo $SME_SUITE_ID；`);
-        s.should.have.property('decisionMap')
-            .with.deep.equal({});
         s.should.have.property('activity_line')
             .with.deep.equal(0);
+        s.should.have.property('decisionMap')
+            .with.deep.equal({});
+        s.should.have.property('environments')
+            .with.deep.equal({});
     });
-    it('should convert to string properly', () => {
+    it('should convert to string and from string properly', () => {
         s.should.have.property('toString')
             .with.be.a('function');
         const str = s.toString();
         str.should.be.a('string');
-        console.log(str);
+
+        s.should.have.property('fromString')
+            .with.be.a('function');
+        const obj = new State({name:s.name,parent:s.parent,activities:s.activities,decisionMap:s.decisionMap})
+        obj.fromString(str);
+        obj.should.deep.equal(s);
     });
     it('should action properly', async () => {
         s.should.have.property('action')
@@ -59,7 +66,7 @@ describe('State test.', (suite) => {
         s.should.have.property('next')
             .with.be.a('function');
         s.toString().should.be.a('string');
-        const sf = new StateFactory('test/state-machine-exec.sm');
+        const sf = new StateFactory('test/semi-automation-test.sm');
         await sf.walk(await sf.load());
         // initial
         sf.stateObjects['initial'].next('test_start')
