@@ -42,7 +42,8 @@ describe('State test.', (suite) => {
 
         s.should.have.property('fromString')
             .with.be.a('function');
-        const obj = new State({name:s.name,parent:s.parent,activities:s.activities,decisionMap:s.decisionMap})
+        const obj = new State({name: s.name, parent: s.parent,
+            activities: s.activities, decisionMap: s.decisionMap});
         obj.fromString(str);
         obj.should.deep.equal(s);
     });
@@ -57,9 +58,26 @@ describe('State test.', (suite) => {
             obj.name.should.equal('name');
             obj.activity_line.should.equal(3);
             obj.environments.should.have.property('SME_COMMAND')
-            .with.equal('dummy_command');
+                .with.equal('dummy_command');
             obj.environments.should.have.property('SME_SUITE_ID')
-            .with.equal('dummy_suite_id');
+                .with.equal('dummy_suite_id');
+        }
+        const obj = new State({name: s.name, parent: s.parent, activities:
+            'echo A\n' +
+            'echo HAPPY\n' +
+            'echo NEW\n' +
+            ':SME_SUSPEND\n' +
+            'echo YEAR',
+            decisionMap: s.decisionMap});
+        obj.activity_line.should.equal(0);
+        try {
+            await obj.action();
+        } catch (e) {
+            console.warn(e);
+            obj.activity_line.should.equal(4);
+            let retObj = await obj.action();
+            obj.activity_line.should.equal(5);
+            retObj.should.deep.equal(obj);
         }
     });
     it('should move next properly', async () => {

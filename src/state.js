@@ -1,4 +1,4 @@
-import {exec} from 'child_process';
+import {execSync} from 'child_process';
 /**
  ** main class of State
  */
@@ -39,8 +39,7 @@ export default class State {
     }
     /**
      * fromString
-     * @param {string} JSON expression of State object
-     * return this from JSON
+     * @param {string} str JSON expression of State object
      */
     fromString(str) {
         let obj = JSON.parse(str);
@@ -69,31 +68,37 @@ export default class State {
     }
     /**
      * action
+     * @return {Promise}
      */
     async action() {
-        if (typeof this.activities === 'string') {
-            const activities = this.activities.split('\n')
-                .map((value) => {
-                    return value.replace('；', ';');
-                });
-            for (;this.activity_line < activities.length;
-                this.activity_line++) {
-                const command = activities[this.activity_line];
-                const {stdout, stderr} = await (new Promise(
-                    (resolve, reject) => {
-                        exec(command, (err, stdout, stderr) => {
-                            if (err) return reject(err);
-                            resolve({stdout, stderr});
+        return (new Promise(
+            async (resolve, reject) => {
+                if (typeof this.activities === 'string') {
+                    //need to be UTF-8 ";" because of spec of state-machine-cat
+                    const activities = this.activities.split('\n')
+                        .map((value) => {
+                            return value.replace('；', ';');
                         });
-                    }));
-                if (stdout.startsWith('SME_COMMAND=')) {
-                    process.env['SME_COMMAND'] = stdout
-                        .replace('SME_COMMAND=', '')
-                        .replace(/\n/, '');
+                    for (;this.activity_line < activities.length;
+                        this.activity_line++) {
+                        const command = activities[this.activity_line];
+                        // :SME_SUSPEND is magic word to suspend this action
+                        if (command === ':SME_SUSPEND') {
+                            this.activity_line++;
+                            return reject(command);
+                        }
+                        const stdout = execSync(command)
+                            .toString().replace(/\n/, '');
+                        // SME_COMMAND env will be inherited from child_process
+                        if (stdout.startsWith('SME_COMMAND=')) {
+                            process.env['SME_COMMAND'] = stdout
+                                .replace('SME_COMMAND=', '');
+                        }
+                        console.log('stdout:', stdout);
+                    }
                 }
-                console.log('stdout:', stdout);
-                console.log('stderr:', stderr);
+                resolve(this);
             }
-        }
+        ));
     }
 }
