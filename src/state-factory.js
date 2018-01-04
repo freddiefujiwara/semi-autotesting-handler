@@ -106,4 +106,11 @@ export default class StateFactory {
             resolve();
         });
     }
+    /**
+     * run
+     */
+    async run(){
+        await this.walk(await this.smToJSON());
+        console.log(this.load());
+    }
 }

@@ -21,7 +21,7 @@ initial,
         "suite/case/result":
             echo TODO:push result to google spreadsheet
             export SME_CUR_CASE_ID=`expr $SME_CUR_CASE_ID + 1`
-            if [ "`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID]`" = null ]； then export SME_COMMAND=does_not_have_next ； else export SME_COMMAND=has_next ； fi;
+            if [ "`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID]`" = null ]； then export SME_DECISION=does_not_have_next ； else export SME_DECISION=has_next ； fi;
         "suite/case/initial" => "suite/case/given";
         "suite/case/given" => "suite/case/given": test_back;
         "suite/case/given" => "suite/case/when": test_ok;

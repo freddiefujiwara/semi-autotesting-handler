@@ -10,7 +10,7 @@ describe('State test.', (suite) => {
             name: 'name',
             parent: 'parent',
             activities:
-            `export SME_COMMAND=dummy_command;echo SME_COMMAND=$SME_COMMAND
+            `export SME_DECISION=dummy_command;echo SME_DECISION=$SME_DECISION
             echo $SME_SUITE_ID；echo $SME_SUITE_ID
             echo Hello world`,
             decisionMap: {},
@@ -24,7 +24,7 @@ describe('State test.', (suite) => {
             .with.equal('parent');
         s.should.have.property('activities')
             .with.equal(
-                `export SME_COMMAND=dummy_command;echo SME_COMMAND=$SME_COMMAND
+                `export SME_DECISION=dummy_command;echo SME_DECISION=$SME_DECISION
             echo $SME_SUITE_ID；echo $SME_SUITE_ID
             echo Hello world`);
         s.should.have.property('activity_line')
@@ -53,11 +53,11 @@ describe('State test.', (suite) => {
         process.env['SME_SUITE_ID'] = 'dummy_suite_id';
         if (!process.platform.startsWith('win')) {
             await s.action();
-            process.env['SME_COMMAND'].should.equal('dummy_command');
+            process.env['SME_DECISION'].should.equal('dummy_command');
             const obj = JSON.parse(s.toString());
             obj.name.should.equal('name');
             obj.activity_line.should.equal(3);
-            obj.environments.should.have.property('SME_COMMAND')
+            obj.environments.should.have.property('SME_DECISION')
                 .with.equal('dummy_command');
             obj.environments.should.have.property('SME_SUITE_ID')
                 .with.equal('dummy_suite_id');

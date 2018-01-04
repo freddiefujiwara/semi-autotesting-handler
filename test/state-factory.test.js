@@ -85,4 +85,13 @@ describe('StateFactory test.', (suite) => {
         .with.equal('suite/case/then');
         fs.unlinkSync(tmpFile);
     });
+    it('should run properly', async () => {
+        const tmpFile = `${os.tmpdir()}${path.sep}${uuid.v4()}`;
+        sf = new StateFactory('test/semi-automation-test.sm', tmpFile);
+        sf.should.have.property('run')
+            .with.be.a('function');
+        await sf.run();
+        sf.save(sf.stateObjects['suite/case/then']);
+        fs.unlinkSync(tmpFile);
+    });
 });

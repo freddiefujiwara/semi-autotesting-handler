@@ -46,7 +46,7 @@
                                 {
                                     "name": "suite/case/result",
                                     "type": "regular",
-                                    "activities": "echo TODO:push result to google spreadsheet\n            export SME_CUR_CASE_ID=`expr $SME_CUR_CASE_ID + 1`\n            if [ \"`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID]`\" = null ]； then export SME_COMMAND=does_not_have_next ； else export SME_COMMAND=has_next ； fi"
+                                    "activities": "echo TODO:push result to google spreadsheet\n            export SME_CUR_CASE_ID=`expr $SME_CUR_CASE_ID + 1`\n            if [ \"`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID]`\" = null ]； then export SME_DECISION=does_not_have_next ； else export SME_DECISION=has_next ； fi"
                                 }
                             ],
                             "transitions": [
