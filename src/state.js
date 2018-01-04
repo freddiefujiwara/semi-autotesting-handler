@@ -1,4 +1,4 @@
-import {exec} from 'child_process';
+import {execSync} from 'child_process';
 /**
  ** main class of State
  */
@@ -9,14 +9,14 @@ export default class State {
      * @param {string} parent
      * @param {string} activities
      * @param {Object} dicision
-     * @param {Object} valiables
      */
-    constructor({name, parent, activities, decisionMap={}, valiables={}}) {
+    constructor({name, parent, activities, decisionMap={}}) {
         this.name = name;
         this.parent = parent;
         this.activities = activities;
+        this.activity_line = 0;
+        this.environments = {};
         this.decisionMap = decisionMap;
-        this.valiables = valiables;
     }
     /**
      * toString
@@ -24,11 +24,29 @@ export default class State {
      * @return {string}
      */
     toString() {
+        let environments = {};
+        Object.keys(process.env).map((key) => {
+            if (key.startsWith('SME_')) {
+                environments[key] = process.env[key];
+            }
+        });
         return JSON.stringify({
             name: this.name,
             activities: this.activities,
-            valiables: this.valiables,
-        });
+            environments: environments,
+            activity_line: this.activity_line,
+        }, undefined, '\t');
+    }
+    /**
+     * fromString
+     * @param {string} str JSON expression of State object
+     */
+    fromString(str) {
+        let obj = JSON.parse(str);
+        this.name = obj.name;
+        this.activities = obj.activities;
+        this.environments = obj.environments;
+        this.activity_line = obj.activity_line;
     }
     /**
      * next
@@ -40,9 +58,6 @@ export default class State {
         if (object.decisionMap.hasOwnProperty(decision)
             && typeof object.decisionMap[decision] === 'object'
         ) {
-            Object.assign(
-                object.decisionMap[decision].valiables
-                , this.valiables);
             return object.decisionMap[decision];
         }
         if (object.hasOwnProperty('parent')
@@ -53,29 +68,37 @@ export default class State {
     }
     /**
      * action
+     * @return {Promise}
      */
     async action() {
-        if (typeof this.activities === 'string') {
-            const activities = this.activities.split('\n')
-                .map((value) => {
-                    return value.replace('；', ';');
-                });
-            for ( let command of activities) {
-                const {stdout, stderr} = await (new Promise(
-                    (resolve, reject) => {
-                        exec(command, (err, stdout, stderr) => {
-                            if (err) return reject(err);
-                            resolve({stdout, stderr});
+        return (new Promise(
+            async (resolve, reject) => {
+                if (typeof this.activities === 'string') {
+                    // need to be UTF-8 ";" because of spec of state-machine-cat
+                    const activities = this.activities.split('\n')
+                        .map((value) => {
+                            return value.replace(/；/g, ';');
                         });
-                    }));
-                if (stdout.startsWith('SAH_COMMAND=')) {
-                    process.env['SAH_COMMAND'] = stdout
-                        .replace('SAH_COMMAND=', '')
-                        .replace(/\n/, '');
+                    for (;this.activity_line < activities.length;
+                        this.activity_line++) {
+                        let command = activities[this.activity_line];
+                        command += ` && env | grep SME_`;
+                        const stdouts = execSync(command)
+                            .toString().split(/\n/);
+                        let stdout= '';
+                        stdouts.map((keyVal) => {
+                            if (keyVal.startsWith('SME_')) {
+                                const pair = keyVal.split(/=/);
+                                process.env[pair[0]] = pair[1];
+                                return;
+                            }
+                            stdout += keyVal;
+                        });
+                        console.log('SME> ', stdout);
+                    }
                 }
-                console.log('stdout:', stdout);
-                console.log('stderr:', stderr);
+                resolve(this);
             }
-        }
+        ));
     }
 }

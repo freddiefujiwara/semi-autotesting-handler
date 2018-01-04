@@ -2,7 +2,7 @@
 import chai from 'chai';
 chai.should();
 import State from '../src/state';
-import StateFactory from '../src/state-factory';
+import StateMachineExec from '../src/state-machine-exec';
 describe('State test.', (suite) => {
     let s = undefined;
     beforeEach(() => {
@@ -10,9 +10,9 @@ describe('State test.', (suite) => {
             name: 'name',
             parent: 'parent',
             activities:
-            `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
-            echo Hello world
-            echo $SAH_SUITE_ID；`,
+            `export SME_DECISION=dummy_command;echo SME_DECISION=$SME_DECISION
+            echo $SME_SUITE_ID；echo $SME_SUITE_ID
+            echo Hello world`,
             decisionMap: {},
         });
     });
@@ -24,34 +24,60 @@ describe('State test.', (suite) => {
             .with.equal('parent');
         s.should.have.property('activities')
             .with.equal(
-                `export SAH_COMMAND=dummy_command;echo SAH_COMMAND=$SAH_COMMAND
-            echo Hello world
-            echo $SAH_SUITE_ID；`);
+           `export SME_DECISION=dummy_command;echo SME_DECISION=$SME_DECISION
+            echo $SME_SUITE_ID；echo $SME_SUITE_ID
+            echo Hello world`);
+        s.should.have.property('activity_line')
+            .with.deep.equal(0);
         s.should.have.property('decisionMap')
             .with.deep.equal({});
-        s.should.have.property('valiables')
+        s.should.have.property('environments')
             .with.deep.equal({});
     });
-    it('should convert to string properly', () => {
+    it('should convert to string and from string properly', () => {
         s.should.have.property('toString')
             .with.be.a('function');
-        s.toString().should.be.a('string');
+        const str = s.toString();
+        str.should.be.a('string');
+
+        s.should.have.property('fromString')
+            .with.be.a('function');
+        const obj = new State({name: s.name, parent: s.parent,
+            activities: s.activities, decisionMap: s.decisionMap});
+        obj.fromString(str);
+        obj.should.deep.equal(s);
     });
     it('should action properly', async () => {
         s.should.have.property('action')
             .with.be.a('function');
-        process.env['SAH_SUITE_ID'] = 'dummy_suite_id';
+        process.env['SME_SUITE_ID'] = 'dummy_suite_id';
         if (!process.platform.startsWith('win')) {
             await s.action();
-            process.env['SAH_COMMAND'].should.equal('dummy_command');
+            process.env['SME_DECISION'].should.equal('dummy_command');
+            const obj = JSON.parse(s.toString());
+            obj.name.should.equal('name');
+            obj.activity_line.should.equal(3);
+            obj.environments.should.have.property('SME_DECISION')
+                .with.equal('dummy_command');
+            obj.environments.should.have.property('SME_SUITE_ID')
+                .with.equal('dummy_suite_id');
         }
+        const obj = new State({name: s.name, parent: s.parent, activities:
+            'echo A\n' +
+            'echo HAPPY\n' +
+            'echo NEW\n' +
+            'echo YEAR',
+            decisionMap: s.decisionMap});
+        obj.activity_line.should.equal(0);
+        await obj.action();
+        obj.activity_line.should.equal(4);
     });
     it('should move next properly', async () => {
         s.should.have.property('next')
             .with.be.a('function');
         s.toString().should.be.a('string');
-        const sf = new StateFactory('test/state-machine-exec.sm');
-        await sf.walk(await sf.load());
+        const sf = new StateMachineExec('test/semi-automation-test.sm');
+        await sf.walk(await sf.smToJSON());
         // initial
         sf.stateObjects['initial'].next('test_start')
             .should.have.property('name').with.equal('start');
@@ -89,18 +115,8 @@ describe('State test.', (suite) => {
             .should.have.property('name').with.equal('suite/case/result');
 
         // suite/case/result
-        sf.stateObjects['suite/case/result'].valiables = {
-            key1: 'value1',
-            key2: 'value2',
-            key3: 'value3',
-        };
         let finish = sf.stateObjects['suite/case/result'].next('test_finish');
         finish.should.have.property('name').with.equal('finish');
-        finish.should.have.property('valiables').with.deep.equal({
-            key1: 'value1',
-            key2: 'value2',
-            key3: 'value3',
-        });
         sf.stateObjects['suite/case/result'].next('has_next')
             .should.have.property('name').with.equal('suite/has_next');
         sf.stateObjects['suite/case/result'].next('does_not_have_next')

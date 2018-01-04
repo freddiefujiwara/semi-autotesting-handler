@@ -3,27 +3,29 @@
 let program = require('commander');
 let pkg = require('./package');
 
-let hostValue = undefined;
-let textValue = undefined;
+let decisionValue = undefined;
+let argsValue = undefined;
 
 program
     .version(pkg.version)
     .description(pkg.description)
-    .usage('state-machine-exec <host> <text>')
-    .arguments('<host> <text>')
-    .action(function(host,text){
-        hostValue = host;
-        textValue = text;
+    .usage('state-machine-exec <decision> <args>')
+    .arguments('<decision> <args>')
+    .action(function(decision,args){
+        decisionValue = decision;
+        argsValue = args;
     });
 program.parse(process.argv);
-if(typeof hostValue === 'undefined' || typeof textValue === 'undefined'){
-    console.error(program.usage());
-    process.exit(1);
+if(typeof decisionValue === 'string'){
+    process.env['SME_DECISION'] = decisionValue;
+}
+if(typeof argsValue === 'string'){
+    process.env['SME_ARGS'] = argsValue;
 }
 
 let StateMachineExec = require('./lib/state-machine-exec');
-let ghs = new StateMachineExec();
-ghs.run(hostValue,textValue)
+let sme = new StateMachineExec();
+sme.run()
     .then(function(){
     })
-    .catch(function(){});
+    .catch(function(err){ console.warn(err)});
