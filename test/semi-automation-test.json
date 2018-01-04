@@ -7,7 +7,7 @@
         {
             "name": "start",
             "type": "regular",
-            "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"テストスイート$SME_ARGSを始めましょう。\"\n    export SME_SUITE_ID=`cat $HOME/.sah-suites.json | jq .[$COMMAND-1] | sed 's/\"//g'`\n    export SME_CUR_SUITE=`gsjson -s $HOME/.google-spreadsheet.json $SME_SUITE_ID`"
+            "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"テストスイート$SME_ARGSを始めましょう。\"\n    export SME_SUITE_ID=`cat $HOME/.sah-suites.json | jq .[$SME_ARGS-1] | sed 's/\"//g'`\n    echo $SME_SUITE_ID\n    export SME_CUR_SUITE=\"`gsjson -s $HOME/.google-spreadsheet.json $SME_SUITE_ID`\""
         },
         {
             "name": "suite",
@@ -31,17 +31,17 @@
                                 {
                                     "name": "suite/case/given",
                                     "type": "regular",
-                                    "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"ではテストケースID:$SME_CUR_CASE_ID、`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].feature`を始めます。前提条件 `echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].given`を準備してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。\"\n        :SME_SUSPEND"
+                                    "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"ではテストケースID:$SME_CUR_CASE_ID、`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].feature`を始めます。前提条件 `echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].given`を準備してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。\""
                                 },
                                 {
                                     "name": "suite/case/when",
                                     "type": "regular",
-                                    "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"次に、アクション`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].when`を実行してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。\"\n        :SME_SUSPEND"
+                                    "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"次に、アクション`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].when`を実行してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。\""
                                 },
                                 {
                                     "name": "suite/case/then",
                                     "type": "regular",
-                                    "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"次に、期待値`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].then`を確認してください。期待値通りであれば”テストOK”、そうでない場合は”テストNG”、もう一度聞きたい場合は”テストもう一度”と言ってください。\"\n        :SME_SUSPEND"
+                                    "activities": "echo google-home-speaker $GOOGLE_HOME_IP \"次に、期待値`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].then`を確認してください。期待値通りであれば”テストOK”、そうでない場合は”テストNG”、もう一度聞きたい場合は”テストもう一度”と言ってください。\""
                                 },
                                 {
                                     "name": "suite/case/result",

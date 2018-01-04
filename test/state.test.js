@@ -66,19 +66,11 @@ describe('State test.', (suite) => {
             'echo A\n' +
             'echo HAPPY\n' +
             'echo NEW\n' +
-            ':SME_SUSPEND\n' +
             'echo YEAR',
             decisionMap: s.decisionMap});
         obj.activity_line.should.equal(0);
-        try {
-            await obj.action();
-        } catch (e) {
-            console.warn(e);
-            obj.activity_line.should.equal(4);
-            let retObj = await obj.action();
-            obj.activity_line.should.equal(5);
-            retObj.should.deep.equal(obj);
-        }
+        await obj.action();
+        obj.activity_line.should.equal(4);
     });
     it('should move next properly', async () => {
         s.should.have.property('next')

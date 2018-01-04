@@ -113,8 +113,10 @@ export default class StateMachineExec {
         await this.walk(await this.smToJSON());
         let target = this.load();
         try {
-            for (target.action(); ;
-            target = target.next(process.env['SME_DECISION']));
+            for (;;process.env['SME_DECISION'] = 'default') {
+                await target.action();
+                target = target.next(process.env['SME_DECISION']);
+            }
         } catch (e) {
             console.log(e);
             this.save(target);

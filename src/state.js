@@ -77,18 +77,12 @@ export default class State {
                     // need to be UTF-8 ";" because of spec of state-machine-cat
                     const activities = this.activities.split('\n')
                         .map((value) => {
-                            return value.replace('；', ';');
+                            return value.replace(/；/g, ';');
                         });
                     for (;this.activity_line < activities.length;
                         this.activity_line++) {
                         let command = activities[this.activity_line];
-                        // :SME_SUSPEND is magic word to suspend this action
-                        if (command === ':SME_SUSPEND') {
-                            this.activity_line++;
-                            return reject(command);
-                        }
                         command += ` && env | grep SME_`;
-                        console.log(command);
                         const stdouts = execSync(command)
                             .toString().split(/\n/);
                         let stdout= '';
