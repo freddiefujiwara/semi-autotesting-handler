@@ -1,6 +1,6 @@
 initial,
 "start":
-    google-home-speaker $GOOGLE_HOME_IP 'テストスイート$SME_ARGSを始めましょう。'
+    echo google-home-speaker $GOOGLE_HOME_IP 'テストスイート$SME_ARGSを始めましょう。'
     export SME_SUITE_ID=`cat $HOME/.sah-suites.json | jq .[$COMMAND-1] | sed 's/"//g'`
     export SME_CUR_SUITE=`gsjson -s $HOME/.google-spreadsheet.json $SME_SUITE_ID` ,
 "suite" {
@@ -10,11 +10,11 @@ initial,
         "suite/case/initial":
             ,
         "suite/case/given":
-            google-home-speaker $GOOGLE_HOME_IP "ではテストケースID:$SME_CUR_CASE_ID、`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].feature`を始めます。前提条件 `echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].given`を準備してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
+            echo google-home-speaker $GOOGLE_HOME_IP "ではテストケースID:$SME_CUR_CASE_ID、`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].feature`を始めます。前提条件 `echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].given`を準備してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
         "suite/case/when":
-            google-home-speaker $GOOGLE_HOME_IP "次に、アクション`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].when`を実行してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
+            echo google-home-speaker $GOOGLE_HOME_IP "次に、アクション`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].when`を実行してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。",
         "suite/case/then":
-            google-home-speaker $GOOGLE_HOME_IP "次に、期待値`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].then`を確認してください。期待値通りであれば”テストOK”、そうでない場合は”テストNG”、もう一度聞きたい場合は”テストもう一度”と言ってください。",                
+            echo google-home-speaker $GOOGLE_HOME_IP "次に、期待値`echo $SME_CUR_SUITE | jq .[$SME_CUR_CASE_ID-1].then`を確認してください。期待値通りであれば”テストOK”、そうでない場合は”テストNG”、もう一度聞きたい場合は”テストもう一度”と言ってください。",                
         "suite/case/result":
             echo TODO:push result to google spreadsheet
             export SME_CUR_CASE_ID=`expr $SME_CUR_CASE_ID + 1`
@@ -29,15 +29,15 @@ initial,
         "suite/case/then"  => "suite/case/result": test_ng;
     },
     "suite/has_next":
-      google-home-speaker $GOOGLE_HOME_IP '次のテストケースに移ります',
+      echo google-home-speaker $GOOGLE_HOME_IP '次のテストケースに移ります',
     "suite/no_more_test":
-        google-home-speaker $GOOGLE_HOME_IP 'テストケースは以上です。';
+      echo google-home-speaker $GOOGLE_HOME_IP 'テストケースは以上です。';
     "suite/case/result" => "suite/has_next": has_next;
     "suite/case/result" => "suite/no_more_test": does_not_have_next;
     "suite/has_next" => "suite/case/initial";
 },
 "finish":
-google-home-speaker $GOOGLE_HOME_IP 'お疲れ様でした。',
+echo google-home-speaker $GOOGLE_HOME_IP 'お疲れ様でした。',
 final;
 
 initial       => "start": test_start;
