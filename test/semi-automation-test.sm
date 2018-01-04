@@ -1,6 +1,6 @@
 initial,
 "start":
-    echo google-home-speaker $GOOGLE_HOME_IP 'テストスイート$SME_ARGSを始めましょう。'
+    echo google-home-speaker $GOOGLE_HOME_IP "テストスイート$SME_ARGSを始めましょう。"
     export SME_SUITE_ID=`cat $HOME/.sah-suites.json | jq .[$COMMAND-1] | sed 's/"//g'`
     export SME_CUR_SUITE=`gsjson -s $HOME/.google-spreadsheet.json $SME_SUITE_ID` ,
 "suite" {

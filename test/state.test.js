@@ -2,7 +2,7 @@
 import chai from 'chai';
 chai.should();
 import State from '../src/state';
-import StateFactory from '../src/state-factory';
+import StateMachineExec from '../src/state-machine-exec';
 describe('State test.', (suite) => {
     let s = undefined;
     beforeEach(() => {
@@ -24,7 +24,7 @@ describe('State test.', (suite) => {
             .with.equal('parent');
         s.should.have.property('activities')
             .with.equal(
-                `export SME_DECISION=dummy_command;echo SME_DECISION=$SME_DECISION
+           `export SME_DECISION=dummy_command;echo SME_DECISION=$SME_DECISION
             echo $SME_SUITE_ID；echo $SME_SUITE_ID
             echo Hello world`);
         s.should.have.property('activity_line')
@@ -84,7 +84,7 @@ describe('State test.', (suite) => {
         s.should.have.property('next')
             .with.be.a('function');
         s.toString().should.be.a('string');
-        const sf = new StateFactory('test/semi-automation-test.sm');
+        const sf = new StateMachineExec('test/semi-automation-test.sm');
         await sf.walk(await sf.smToJSON());
         // initial
         sf.stateObjects['initial'].next('test_start')

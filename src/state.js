@@ -81,14 +81,15 @@ export default class State {
                         });
                     for (;this.activity_line < activities.length;
                         this.activity_line++) {
-                        const command = activities[this.activity_line];
+                        let command = activities[this.activity_line];
                         // :SME_SUSPEND is magic word to suspend this action
                         if (command === ':SME_SUSPEND') {
                             this.activity_line++;
                             return reject(command);
                         }
-                        const stdouts = execSync(
-                            command + ' && env | grep SME_')
+                        command += ` && env | grep SME_`;
+                        console.log(command);
+                        const stdouts = execSync(command)
                             .toString().split(/\n/);
                         let stdout= '';
                         stdouts.map((keyVal) => {
