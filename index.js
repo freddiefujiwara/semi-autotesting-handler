@@ -1,31 +1,17 @@
 #!/usr/bin/env node
 
-let program = require('commander');
-let pkg = require('./package');
-
 let decisionValue = undefined;
 let argsValue = undefined;
-
-program
-    .version(pkg.version)
-    .description(pkg.description)
-    .usage('state-machine-exec <decision> <args>')
-    .arguments('<decision> <args>')
-    .action(function(decision,args){
-        decisionValue = decision;
-        argsValue = args;
-    });
-program.parse(process.argv);
-if(typeof decisionValue === 'string'){
-    process.env['SME_DECISION'] = decisionValue;
+if(process.argv.length > 3){
+    argsValue = process.argv[3];
 }
-if(typeof argsValue === 'string'){
-    process.env['SME_ARGS'] = argsValue;
+if(process.argv.length > 2){
+    decisionValue = process.argv[2];
 }
 
-let StateMachineExec = require('./lib/state-machine-exec');
-let sme = new StateMachineExec();
-sme.run()
+const StateMachineExec = require('./lib/state-machine-exec');
+const sme = new StateMachineExec();
+sme.run(decisionValue,argsValue)
     .then(function(){
     })
     .catch(function(err){ console.warn(err)});

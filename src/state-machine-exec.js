@@ -108,17 +108,21 @@ export default class StateMachineExec {
     }
     /**
      * run
+     * @param {string} decision
+     * @param {string} args
      */
-    async run() {
+    async run(decision = 'default', args = undefined) {
         await this.walk(await this.smToJSON());
         let target = this.load();
+        process.env['SME_DECISION'] = decision;
+        process.env['SME_ARGS'] = args;
         try {
             for (;;process.env['SME_DECISION'] = 'default') {
                 await target.action();
                 target = target.next(process.env['SME_DECISION']);
             }
         } catch (e) {
-            console.log(e);
+            console.warn(e);
             this.save(target);
         }
     }

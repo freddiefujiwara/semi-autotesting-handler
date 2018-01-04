@@ -31,8 +31,6 @@ describe('State test.', (suite) => {
             .with.deep.equal(0);
         s.should.have.property('decisionMap')
             .with.deep.equal({});
-        s.should.have.property('environments')
-            .with.deep.equal({});
     });
     it('should convert to string and from string properly', () => {
         s.should.have.property('toString')
@@ -57,9 +55,9 @@ describe('State test.', (suite) => {
             const obj = JSON.parse(s.toString());
             obj.name.should.equal('name');
             obj.activity_line.should.equal(3);
-            obj.environments.should.have.property('SME_DECISION')
+            process.env.should.have.property('SME_DECISION')
                 .with.equal('dummy_command');
-            obj.environments.should.have.property('SME_SUITE_ID')
+            process.env.should.have.property('SME_SUITE_ID')
                 .with.equal('dummy_suite_id');
         }
         const obj = new State({name: s.name, parent: s.parent, activities:
@@ -79,8 +77,9 @@ describe('State test.', (suite) => {
         const sf = new StateMachineExec('test/semi-automation-test.sm');
         await sf.walk(await sf.smToJSON());
         // initial
-        sf.stateObjects['initial'].next('test_start')
-            .should.have.property('name').with.equal('start');
+        const start = sf.stateObjects['initial'].next('test_start');
+        start.should.have.property('name').with.equal('start');
+        start.should.have.property('activity_line').with.equal(0);
 
         // start
         sf.stateObjects['start'].next()

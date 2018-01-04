@@ -6,7 +6,7 @@
 [![dependencies Status](https://david-dm.org/freddiefujiwara/state-machine-exec/status.svg)](https://david-dm.org/freddiefujiwara/state-machine-exec)
 
 # state-machine-exec
-Command line client for chromeless
+Command line state machine executer 
 
 ## Requirements
 
@@ -18,9 +18,10 @@ Command line client for chromeless
 npm i -g state-machine-exec
 ```
 
+*you need to prepare YOUR $HOME/.state-machine-exec.sm
 ## Usage
 ```bash                                                                                     
-  Usage: state-machine-exec <host> <text>                                                                                    
+  Usage: state-machine-exec <decision> <args>                                                                                    
                                                                                                                          
                                                                                                                                
                                                                                                                                
@@ -32,7 +33,13 @@ npm i -g state-machine-exec
 
 ## Example
 ```bash
-state-machine-exec 192.168.1.101 "Hello I'm Freddie"
+state-machine-exec test_start 1
+SME>  google-home-speaker 192.168.1.999 テストスイート1を始めましょう。
+SME>  
+SME>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+SME>  
+SME>  
+SME>  google-home-speaker 192.168.1.999 ではテストケースID:1、"qiitaトップページ"を始めます。前提条件 "ブラウザを立ち上げて、クッキーを削除する。"を準備してください。出来たら”テストOK”と言ってください。もう一度聞きたい場合は”テストもう一度”と言ってください。
 ```
 
 ## FAQ

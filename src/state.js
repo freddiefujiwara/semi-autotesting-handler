@@ -15,7 +15,6 @@ export default class State {
         this.parent = parent;
         this.activities = activities;
         this.activity_line = 0;
-        this.environments = {};
         this.decisionMap = decisionMap;
     }
     /**
@@ -45,7 +44,9 @@ export default class State {
         let obj = JSON.parse(str);
         this.name = obj.name;
         this.activities = obj.activities;
-        this.environments = obj.environments;
+        Object.keys(obj.environments).map((key) => {
+            process.env[key] = obj.environments[key];
+        });
         this.activity_line = obj.activity_line;
     }
     /**
@@ -58,7 +59,9 @@ export default class State {
         if (object.decisionMap.hasOwnProperty(decision)
             && typeof object.decisionMap[decision] === 'object'
         ) {
-            return object.decisionMap[decision];
+            let target = object.decisionMap[decision];
+            target.activity_line = 0;
+            return target;
         }
         if (object.hasOwnProperty('parent')
             && typeof object.parent === 'object') {
