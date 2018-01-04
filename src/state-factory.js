@@ -29,6 +29,22 @@ export default class StateFactory {
         fs.writeFileSync(this.currentStateFile,
             state.toString(), {encoding: 'utf-8', mode: 0o644, flag: 'w+'});
     }
+    /**
+     * load state function
+     * @return {State} state
+     */
+    load() {
+        try {
+            const strObj = fs.readFileSync(this.currentStateFile, 'utf-8');
+            const loadedObj = JSON.parse(strObj);
+            if (this.stateObjects.hasOwnProperty(loadedObj.name)) {
+                const targetObj = this.stateObjects[loadedObj.name];
+                targetObj.fromString(strObj);
+                return targetObj;
+            }
+        } catch (e) {console.warn(e)}
+        return this.stateObjects.initial;
+    }
 
     /**
      * smToJSON function

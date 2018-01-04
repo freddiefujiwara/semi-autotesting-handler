@@ -73,9 +73,16 @@ describe('StateFactory test.', (suite) => {
             fs.readFileSync('test/semi-automation-test.json',
                 'utf8'));
         await sf.walk(stateMachineObject);
-        sf.save(sf.stateObjects.initial);
-        sf.stateObjects.initial.toString().should.equal(
+        let targetObj = sf.load();
+        targetObj.should.have.property('name')
+        .with.equal('initial');
+        sf.save(sf.stateObjects['suite/case/then']);
+        sf.stateObjects['suite/case/then'].toString().should.equal(
             fs.readFileSync(tmpFile, 'utf-8')
         );
+        targetObj = sf.load();
+        targetObj.should.have.property('name')
+        .with.equal('suite/case/then');
+        fs.unlinkSync(tmpFile);
     });
 });
