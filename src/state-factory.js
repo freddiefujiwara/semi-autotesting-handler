@@ -42,7 +42,7 @@ export default class StateFactory {
                 targetObj.fromString(strObj);
                 return targetObj;
             }
-        } catch (e) {console.warn(e)}
+        } catch (e) {}
         return this.stateObjects.initial;
     }
 

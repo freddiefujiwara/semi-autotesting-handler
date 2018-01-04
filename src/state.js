@@ -87,13 +87,18 @@ export default class State {
                             this.activity_line++;
                             return reject(command);
                         }
-                        const stdout = execSync(command)
-                            .toString().replace(/\n/, '');
-                        // SME_COMMAND env will be inherited from child_process
-                        if (stdout.startsWith('SME_COMMAND=')) {
-                            process.env['SME_COMMAND'] = stdout
-                                .replace('SME_COMMAND=', '');
-                        }
+                        const stdouts = execSync(
+                            command + ' && env | grep SME_')
+                            .toString().split(/\n/);
+                        let stdout= '';
+                        stdouts.map((keyVal) => {
+                            if (keyVal.startsWith('SME_')) {
+                                const pair = keyVal.split(/=/);
+                                process.env[pair[0]] = pair[1];
+                                return;
+                            }
+                            stdout += keyVal;
+                        });
                         console.log('SME> ', stdout);
                     }
                 }

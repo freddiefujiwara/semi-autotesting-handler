@@ -11,8 +11,8 @@ describe('State test.', (suite) => {
             parent: 'parent',
             activities:
             `export SME_COMMAND=dummy_command;echo SME_COMMAND=$SME_COMMAND
-            echo Hello world
-            echo $SME_SUITE_ID；`,
+            echo $SME_SUITE_ID；echo $SME_SUITE_ID
+            echo Hello world`,
             decisionMap: {},
         });
     });
@@ -25,8 +25,8 @@ describe('State test.', (suite) => {
         s.should.have.property('activities')
             .with.equal(
                 `export SME_COMMAND=dummy_command;echo SME_COMMAND=$SME_COMMAND
-            echo Hello world
-            echo $SME_SUITE_ID；`);
+            echo $SME_SUITE_ID；echo $SME_SUITE_ID
+            echo Hello world`);
         s.should.have.property('activity_line')
             .with.deep.equal(0);
         s.should.have.property('decisionMap')
