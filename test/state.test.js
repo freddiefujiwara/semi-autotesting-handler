@@ -85,7 +85,7 @@ describe('State test.', (suite) => {
             .with.be.a('function');
         s.toString().should.be.a('string');
         const sf = new StateFactory('test/semi-automation-test.sm');
-        await sf.walk(await sf.load());
+        await sf.walk(await sf.smToJSON());
         // initial
         sf.stateObjects['initial'].next('test_start')
             .should.have.property('name').with.equal('start');

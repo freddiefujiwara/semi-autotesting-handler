@@ -53,7 +53,8 @@
         "eslint-config-google": "^0.9.1",
         "mocha": "^3.4.2",
         "nyc": "^11.1.0",
-        "rimraf": "^2.6.1"
+        "rimraf": "^2.6.1",
+        "uuid": "^3.1.0"
     },
     "dependencies": {
         "commander": "^2.11.0",

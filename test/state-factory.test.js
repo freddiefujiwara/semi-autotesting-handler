@@ -1,5 +1,8 @@
 /* eslint require-jsdoc: 1 */
 import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import uuid from 'uuid';
 import chai from 'chai';
 chai.should();
 import StateFactory from '../src/state-factory';
@@ -14,6 +17,10 @@ describe('StateFactory test.', (suite) => {
         sf.should.have.property('stateMachineFile')
             .with.equal('test/semi-automation-test.sm');
 
+        sf.should.have.property('currentStateFile')
+            .with.equal(
+        `${os.homedir()}${path.sep}.state-machine-exec-current.json`);
+
         sf.should.have.property('stateObjects')
             .with.deep.equal({});
 
@@ -22,37 +29,53 @@ describe('StateFactory test.', (suite) => {
         sf.should.have.property('stateMachineFile')
             .with.equal('/path/to/file');
     });
-    it('should load properly', async () => {
-        sf.should.have.property('load')
+    it('should smToJSON properly', async () => {
+        sf.should.have.property('smToJSON')
             .with.be.a('function');
 
         let expectedObject = JSON.parse(
             fs.readFileSync('test/semi-automation-test.json',
                 'utf8'));
-        (await sf.load()).should.be.a('object')
+        (await sf.smToJSON()).should.be.a('object')
             .with.deep.equal(expectedObject);
 
         try {
-            (await sf.load());
+            (await sf.smToJSON());
         } catch (err) {
             err.should.be.a('object');
         }
 
         sf = new StateFactory('/path/to/file');
         try {
-            (await sf.load());
+            (await sf.smToJSON());
         } catch (err) {
             err.should.be.a('Error');
         }
     });
-    it('should load properly', async () => {
+    it('should walk properly', async () => {
         sf.should.have.property('walk')
             .with.be.a('function');
         const stateMachineObject = JSON.parse(
             fs.readFileSync('test/semi-automation-test.json',
                 'utf8'));
         await sf.walk(stateMachineObject);
-// import util from 'util';
-//        console.log(util.inspect(sf.stateObjects,false,null));
+        sf.stateObjects.should.have.property('initial')
+            .with.have.property('name')
+            .with.equal('initial');
+        //        console.log(util.inspect(sf.stateObjects,false,null));
+    });
+    it('should save/load properly', async () => {
+        const tmpFile = `${os.tmpdir()}${path.sep}${uuid.v4()}`;
+        sf = new StateFactory('test/semi-automation-test.sm', tmpFile);
+        sf.should.have.property('save')
+            .with.be.a('function');
+        const stateMachineObject = JSON.parse(
+            fs.readFileSync('test/semi-automation-test.json',
+                'utf8'));
+        await sf.walk(stateMachineObject);
+        sf.save(sf.stateObjects.initial);
+        sf.stateObjects.initial.toString().should.equal(
+            fs.readFileSync(tmpFile, 'utf-8')
+        );
     });
 });

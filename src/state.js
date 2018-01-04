@@ -74,7 +74,7 @@ export default class State {
         return (new Promise(
             async (resolve, reject) => {
                 if (typeof this.activities === 'string') {
-                    //need to be UTF-8 ";" because of spec of state-machine-cat
+                    // need to be UTF-8 ";" because of spec of state-machine-cat
                     const activities = this.activities.split('\n')
                         .map((value) => {
                             return value.replace('；', ';');
@@ -94,7 +94,7 @@ export default class State {
                             process.env['SME_COMMAND'] = stdout
                                 .replace('SME_COMMAND=', '');
                         }
-                        console.log('stdout:', stdout);
+                        console.log('SME> ', stdout);
                     }
                 }
                 resolve(this);
